@@ -411,6 +411,11 @@ function tAfin(evt) {
     //0pantalla2.transform(matrizC[0][0],matrizC[0][1],matrizC[0][2],matrizC[1][0],matrizC[1][1],matrizC[1][2]);
     //pantalla2.drawImage(imgLocal.getImage(), 0,0);
 }
+function opDesenfoqueLente(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Aplica la función de desenfoqueLente a la imagen
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.desenfoqueLente(imagenSal.getArrayImg()));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
@@ -478,3 +483,5 @@ document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, f
 document.getElementById("op-shearingX").addEventListener('click', shearingX2, false);
 document.getElementById("op-shearingY").addEventListener('click', shearingY2, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
+//proyecto
+document.getElementById('opdesenfoque').addEventListener('click', opDesenfoqueLente);

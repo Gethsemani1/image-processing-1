@@ -447,6 +447,16 @@ function tAfin(evt: any): void{
   //pantalla2.drawImage(imgLocal.getImage(), 0,0);
 }
 
+
+
+function opDesenfoqueLente(evt: any): void {
+  var imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+
+  // Aplica la función de desenfoqueLente a la imagen
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.desenfoqueLente(imagenSal.getArrayImg()));
+}
+
+
 lienzo1.addEventListener('mousemove', handleMouse);
  
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
@@ -525,3 +535,7 @@ document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, f
 document.getElementById("op-shearingX").addEventListener('click', shearingX2, false);
 document.getElementById("op-shearingY").addEventListener('click', shearingY2, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
+
+//proyecto
+
+document.getElementById('opdesenfoque').addEventListener('click', opDesenfoqueLente);

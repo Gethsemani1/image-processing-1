@@ -1379,4 +1379,50 @@ public static matrizDeC (x1: number, y1: number, x2: number, y2:number, x3:numbe
   return cs;
 }
 
+
+public static desenfoqueLente(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  const radio = 30; // Ajusta este valor según la intensidad del desenfoque
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      let sumaR = 0;
+      let sumaG = 0;
+      let sumaB = 0;
+      let total = 0;
+
+      for (let y = -radio; y <= radio; y++) {
+        for (let x = -radio; x <= radio; x++) {
+          const ni = i + y;
+          const nj = j + x;
+
+          if (ni >= 0 && ni < height && nj >= 0 && nj < width) {
+            const distancia = Math.sqrt(y * y + x * x);
+            const factor = Math.exp(-(distancia * distancia) / (2 * radio * radio));
+
+            sumaR += arrImage[0][ni][nj] * factor;
+            sumaG += arrImage[1][ni][nj] * factor;
+            sumaB += arrImage[2][ni][nj] * factor;
+
+            total += factor;
+          }
+        }
+      }
+
+      sal[0][i][j] = Math.round(sumaR / total);
+      sal[1][i][j] = Math.round(sumaG / total);
+      sal[2][i][j] = Math.round(sumaB / total);
+    }
+  }
+
+  return sal;
+}
+
+
+
+
+
 }

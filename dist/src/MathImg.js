@@ -169,8 +169,8 @@ var MathImg = /** @class */ (function () {
         //variable donde guardamos la salida
         var sal = this.initArray(img.getWidth(), img.getHeight());
         var inicio = 0, termino = Math.round(img.getHeight() / 3);
-        for (var j = 0; j < img.getWidth(); j++) {
-            for (var i = inicio; i < termino; i++) {
+        for (var i = inicio; i < termino; i++) {
+            for (var j = 0; j < img.getWidth(); j++) {
                 sal[0][i][j] = 0;
                 sal[1][i][j] = arrImage[1][i][j];
                 sal[2][i][j] = 0;
@@ -1279,6 +1279,38 @@ var MathImg = /** @class */ (function () {
         cs[1][2] = y3 * xa1 * ya2 + y2 * xa3 * ya1 + y1 * xa2 * ya3 - (y1 * ya2 * ya3 + y2 * ya3 * xa1 + y3 * ya1 * xa2);
         cs[1][2] /= det1;
         return cs;
+    };
+    MathImg.desenfoqueLente = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        var radio = 30; // Ajusta este valor según la intensidad del desenfoque
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                var sumaR = 0;
+                var sumaG = 0;
+                var sumaB = 0;
+                var total = 0;
+                for (var y = -radio; y <= radio; y++) {
+                    for (var x = -radio; x <= radio; x++) {
+                        var ni = i + y;
+                        var nj = j + x;
+                        if (ni >= 0 && ni < height && nj >= 0 && nj < width) {
+                            var distancia = Math.sqrt(y * y + x * x);
+                            var factor = Math.exp(-(distancia * distancia) / (2 * radio * radio));
+                            sumaR += arrImage[0][ni][nj] * factor;
+                            sumaG += arrImage[1][ni][nj] * factor;
+                            sumaB += arrImage[2][ni][nj] * factor;
+                            total += factor;
+                        }
+                    }
+                }
+                sal[0][i][j] = Math.round(sumaR / total);
+                sal[1][i][j] = Math.round(sumaG / total);
+                sal[2][i][j] = Math.round(sumaB / total);
+            }
+        }
+        return sal;
     };
     return MathImg;
 }());
