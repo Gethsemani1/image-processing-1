@@ -1422,6 +1422,68 @@ public static desenfoqueLente(arrImage: number[][][]): number[][][] {
 }
 
 
+public static SobreexposicionRadial(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Centro de la imagen
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  // Radio máximo desde el centro
+  const maxRadius = Math.min(centerX, centerY);
+
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Calcula la distancia al centro
+          const distanceToCenter = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
+
+          // Normaliza la distancia al centro en un rango de 0 a 1
+          const normalizedDistance = distanceToCenter / maxRadius;
+
+          // Aplica sobreexposicion proporcional a la distancia al centro
+          const blurAmount = normalizedDistance * 150; // Ajusta el factor de sobreexposicion según sea necesario
+
+      
+          const blurredColorR = arrImage[0][i][j] + blurAmount;
+          const blurredColorG = arrImage[1][i][j] + blurAmount;
+          const blurredColorB = arrImage[2][i][j] + blurAmount;
+
+   
+          sal[0][i][j] = Math.min(255, blurredColorR);
+          sal[1][i][j] = Math.min(255, blurredColorG);
+          sal[2][i][j] = Math.min(255, blurredColorB);
+      }
+  }
+
+  return sal;
+}
+
+
+
+public static escalaGrisesDinamica(arrImage: number[][][], intensidad: number): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      // Calcula el promedio de los canales RGB
+      const promedio = (arrImage[0][i][j] + arrImage[1][i][j] + arrImage[2][i][j]) / 3;
+
+      // Aplica la intensidad dinámica para ajustar la escala de grises
+      const gris = promedio + (intensidad / 100) * (promedio - 128);
+
+      // Asigna el valor ajustado a cada canal
+      sal[0][i][j] = gris;
+      sal[1][i][j] = gris;
+      sal[2][i][j] = gris;
+    }
+  }
+
+  return sal;
+}
 
 
 

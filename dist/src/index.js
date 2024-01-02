@@ -416,6 +416,23 @@ function opDesenfoqueLente(evt) {
     // Aplica la función de desenfoqueLente a la imagen
     imagenSal.imageArray2DtoData(pantalla2, MathImg.desenfoqueLente(imagenSal.getArrayImg()));
 }
+function opSobreexposicionRadial(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.SobreexposicionRadial(imagenSal.getArrayImg()));
+}
+function opEscalaGrisesDinamica() {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Solicita al usuario la intensidad de la escala de grises
+    var intensidadString = prompt('Ingresa la intensidad de la escala de grises (entre -100 y 100):');
+    // Verifica que la intensidad sea válida
+    if (!intensidadString || isNaN(parseInt(intensidadString))) {
+        alert('Ingresa una intensidad válida.');
+        return;
+    }
+    var intensidad = parseInt(intensidadString);
+    // Aplica la función de escala de grises dinámica
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.escalaGrisesDinamica(imagenSal.getArrayImg(), intensidad));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
@@ -484,4 +501,6 @@ document.getElementById("op-shearingX").addEventListener('click', shearingX2, fa
 document.getElementById("op-shearingY").addEventListener('click', shearingY2, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //proyecto
-document.getElementById('opdesenfoque').addEventListener('click', opDesenfoqueLente);
+document.getElementById('op-desenfoque').addEventListener('click', opDesenfoqueLente);
+document.getElementById('op-SobreexposicionRadial').addEventListener('click', opSobreexposicionRadial);
+document.getElementById('op-EscalaGrisesDinamica').addEventListener('click', opEscalaGrisesDinamica);
