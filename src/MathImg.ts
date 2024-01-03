@@ -1487,4 +1487,37 @@ public static escalaGrisesDinamica(arrImage: number[][][], intensidad: number): 
 
 
 
+public static separacionDeCanales(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Desplazamientos para cada canal
+  const desplazamientoR = 30;
+  const desplazamientoG = 15;
+  const desplazamientoB = 0;
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      // Canal rojo
+      sal[0][i][j] = arrImage[0][i][j - desplazamientoR] || 0;
+
+      // Canal verde
+      sal[1][i][j] = arrImage[1][i][j - desplazamientoG] || 0;
+
+      // Canal azul
+      sal[2][i][j] = arrImage[2][i][j - desplazamientoB] || 0;
+    }
+  }
+
+  return sal;
+}
+
+
+
+
+
+
+
+
 }

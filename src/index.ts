@@ -481,7 +481,10 @@ function opEscalaGrisesDinamica() {
 }
 
 
-
+function opSeparacionCanales() {
+  var imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.separacionDeCanales(imagenSal.getArrayImg()));
+}
 
 
 lienzo1.addEventListener('mousemove', handleMouse);
@@ -568,3 +571,4 @@ document.getElementById("op-afin").addEventListener('click', tAfin, false);
 document.getElementById('op-desenfoque').addEventListener('click', opDesenfoqueLente);
 document.getElementById('op-SobreexposicionRadial').addEventListener('click', opSobreexposicionRadial);
 document.getElementById('op-EscalaGrisesDinamica').addEventListener('click', opEscalaGrisesDinamica);
+document.getElementById('op-SeparacionCanales').addEventListener('click', opSeparacionCanales);

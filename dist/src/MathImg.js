@@ -1357,6 +1357,26 @@ var MathImg = /** @class */ (function () {
         }
         return sal;
     };
+    MathImg.separacionDeCanales = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Desplazamientos para cada canal
+        var desplazamientoR = 30;
+        var desplazamientoG = 15;
+        var desplazamientoB = 0;
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Canal rojo
+                sal[0][i][j] = arrImage[0][i][j - desplazamientoR] || 0;
+                // Canal verde
+                sal[1][i][j] = arrImage[1][i][j - desplazamientoG] || 0;
+                // Canal azul
+                sal[2][i][j] = arrImage[2][i][j - desplazamientoB] || 0;
+            }
+        }
+        return sal;
+    };
     return MathImg;
 }());
 export { MathImg };

@@ -433,6 +433,10 @@ function opEscalaGrisesDinamica() {
     // Aplica la función de escala de grises dinámica
     imagenSal.imageArray2DtoData(pantalla2, MathImg.escalaGrisesDinamica(imagenSal.getArrayImg(), intensidad));
 }
+function opSeparacionCanales() {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.separacionDeCanales(imagenSal.getArrayImg()));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
@@ -504,3 +508,4 @@ document.getElementById("op-afin").addEventListener('click', tAfin, false);
 document.getElementById('op-desenfoque').addEventListener('click', opDesenfoqueLente);
 document.getElementById('op-SobreexposicionRadial').addEventListener('click', opSobreexposicionRadial);
 document.getElementById('op-EscalaGrisesDinamica').addEventListener('click', opEscalaGrisesDinamica);
+document.getElementById('op-SeparacionCanales').addEventListener('click', opSeparacionCanales);
