@@ -1513,7 +1513,88 @@ public static separacionDeCanales(arrImage: number[][][]): number[][][] {
   return sal;
 }
 
+public static EnfriamientoColor(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
 
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const r = arrImage[0][i][j];
+      const g = arrImage[1][i][j];
+      const b = arrImage[2][i][j];
+
+      // Reduce la intensidad de los colores cálidos (rojo)
+      const nuevoR = Math.max(0, r - 20);
+      const nuevoG = g;
+      const nuevoB = Math.min(255, b + 20);
+
+      sal[0][i][j] = nuevoR;
+      sal[1][i][j] = nuevoG;
+      sal[2][i][j] = nuevoB;
+    }
+  }
+
+  return sal;
+}
+
+public static CalentamientoColor(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const r = arrImage[0][i][j];
+      const g = arrImage[1][i][j];
+      const b = arrImage[2][i][j];
+
+      // Aumenta la intensidad de los colores cálidos (rojo)
+      const nuevoR = Math.min(255, r + 20);
+      const nuevoG = g;
+      const nuevoB = Math.max(0, b - 20);
+
+      sal[0][i][j] = nuevoR;
+      sal[1][i][j] = nuevoG;
+      sal[2][i][j] = nuevoB;
+    }
+  }
+
+  return sal;
+}
+
+
+
+public static NegativoRadial(arrImage: number[][][], radio: number): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Calcula el punto central de la imagen
+  const centerX = Math.floor(width / 2);
+  const centerY = Math.floor(height / 2);
+
+  // Aplica el efecto negativo radial dentro del radio especificado
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          const distanciaAlCentro = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
+
+          if (distanciaAlCentro <= radio) {
+              // Invierte los colores solo dentro del radio
+              sal[0][i][j] = 255 - arrImage[0][i][j];
+              sal[1][i][j] = 255 - arrImage[1][i][j];
+              sal[2][i][j] = 255 - arrImage[2][i][j];
+          } else {
+              // Mantén los colores originales fuera del radio
+              sal[0][i][j] = arrImage[0][i][j];
+              sal[1][i][j] = arrImage[1][i][j];
+              sal[2][i][j] = arrImage[2][i][j];
+          }
+      }
+  }
+
+  return sal;
+}
 
 
 

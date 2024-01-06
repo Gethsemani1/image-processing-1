@@ -1377,6 +1377,73 @@ var MathImg = /** @class */ (function () {
         }
         return sal;
     };
+    MathImg.EnfriamientoColor = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                var r = arrImage[0][i][j];
+                var g = arrImage[1][i][j];
+                var b = arrImage[2][i][j];
+                // Reduce la intensidad de los colores cálidos (rojo)
+                var nuevoR = Math.max(0, r - 20);
+                var nuevoG = g;
+                var nuevoB = Math.min(255, b + 20);
+                sal[0][i][j] = nuevoR;
+                sal[1][i][j] = nuevoG;
+                sal[2][i][j] = nuevoB;
+            }
+        }
+        return sal;
+    };
+    MathImg.CalentamientoColor = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                var r = arrImage[0][i][j];
+                var g = arrImage[1][i][j];
+                var b = arrImage[2][i][j];
+                // Aumenta la intensidad de los colores cálidos (rojo)
+                var nuevoR = Math.min(255, r + 20);
+                var nuevoG = g;
+                var nuevoB = Math.max(0, b - 20);
+                sal[0][i][j] = nuevoR;
+                sal[1][i][j] = nuevoG;
+                sal[2][i][j] = nuevoB;
+            }
+        }
+        return sal;
+    };
+    MathImg.NegativoRadial = function (arrImage, radio) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Calcula el punto central de la imagen
+        var centerX = Math.floor(width / 2);
+        var centerY = Math.floor(height / 2);
+        // Aplica el efecto negativo radial dentro del radio especificado
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                var distanciaAlCentro = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
+                if (distanciaAlCentro <= radio) {
+                    // Invierte los colores solo dentro del radio
+                    sal[0][i][j] = 255 - arrImage[0][i][j];
+                    sal[1][i][j] = 255 - arrImage[1][i][j];
+                    sal[2][i][j] = 255 - arrImage[2][i][j];
+                }
+                else {
+                    // Mantén los colores originales fuera del radio
+                    sal[0][i][j] = arrImage[0][i][j];
+                    sal[1][i][j] = arrImage[1][i][j];
+                    sal[2][i][j] = arrImage[2][i][j];
+                }
+            }
+        }
+        return sal;
+    };
     return MathImg;
 }());
 export { MathImg };

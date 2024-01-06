@@ -486,6 +486,41 @@ function opSeparacionCanales() {
   imagenSal.imageArray2DtoData(pantalla2, MathImg.separacionDeCanales(imagenSal.getArrayImg()));
 }
 
+function opEnfriamientoColor() {
+  var imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+
+  // Aplica la función de enfriamiento de color
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.EnfriamientoColor(imagenSal.getArrayImg()));
+}
+
+
+function opCalentamientoColor() {
+  var imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+
+  // Aplica la función de calentamiento de color
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.CalentamientoColor(imagenSal.getArrayImg()));
+}
+
+
+
+function opNegativoRadial(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+
+  // Pide al usuario el radio para el efecto negativo radial
+  const radioString = prompt('Ingresa el radio para el efecto negativo radial:');
+  const radio = radioString ? parseFloat(radioString) : 0;
+
+  // Verifica que el radio sea válido
+  if (isNaN(radio) || radio < 0) {
+      alert('Ingresa un radio válido.');
+      return;
+  }
+
+  // Aplica la función con el radio proporcionado
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.NegativoRadial(imagenSal.getArrayImg(), radio));
+}
+
+
 
 lienzo1.addEventListener('mousemove', handleMouse);
  
@@ -572,3 +607,6 @@ document.getElementById('op-desenfoque').addEventListener('click', opDesenfoqueL
 document.getElementById('op-SobreexposicionRadial').addEventListener('click', opSobreexposicionRadial);
 document.getElementById('op-EscalaGrisesDinamica').addEventListener('click', opEscalaGrisesDinamica);
 document.getElementById('op-SeparacionCanales').addEventListener('click', opSeparacionCanales);
+document.getElementById('op-EnfriamientoColor').addEventListener('click', opEnfriamientoColor);
+document.getElementById('op-calentamientoColor').addEventListener('click', opCalentamientoColor);
+document.getElementById('op-NegativoRadial').addEventListener('click', opNegativoRadial);
