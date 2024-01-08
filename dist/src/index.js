@@ -1,7 +1,7 @@
 import { ImageLocal } from "./ImageLocal.js";
 import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
-import { Particle } from "./particle.js";
+import { Particle, YellowFlowerWithPetals } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
@@ -295,6 +295,28 @@ function animateParticles() {
     }
     requestAnimationFrame(animateParticles);
 }
+///seccion de flores amarillas ///
+var yellowFlowerWithPetalsArray = [];
+function initYellowFlowersWithPetals() {
+    // Crea flores amarillas con pétalos en posiciones aleatorias
+    for (var i = 0; i < 40; i++) {
+        var x = Math.random() * pantalla2.canvas.width;
+        var y = Math.random() * pantalla2.canvas.height;
+        var size = Math.random() * +5;
+        yellowFlowerWithPetalsArray.push(new YellowFlowerWithPetals(x, y, size, ctx));
+    }
+}
+function animateYellowFlowersWithPetals() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    for (var i = 0; i < yellowFlowerWithPetalsArray.length; i++) {
+        yellowFlowerWithPetalsArray[i].draw();
+    }
+    requestAnimationFrame(animateYellowFlowersWithPetals);
+}
+function FloresConPetalos() {
+    initYellowFlowersWithPetals();
+    animateYellowFlowersWithPetals();
+}
 //seccion de histogramas  
 function histogramas(evt) {
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -418,7 +440,16 @@ function opDesenfoqueLente(evt) {
 }
 function opSobreexposicionRadial(evt) {
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
-    imagenSal.imageArray2DtoData(pantalla2, MathImg.SobreexposicionRadial(imagenSal.getArrayImg()));
+    // Pide al usuario el radio para el efecto de sobreexposición radial
+    var radioString = prompt('Ingresa el radio para el efecto de sobreexposición radial:');
+    var radio = radioString ? parseFloat(radioString) : 0;
+    // Verifica que el radio sea válido
+    if (isNaN(radio) || radio < 0) {
+        alert('Ingresa un radio válido.');
+        return;
+    }
+    // Aplica la función con el radio proporcionado
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.SobreexposicionRadial(imagenSal.getArrayImg(), radio));
 }
 function opEscalaGrisesDinamica() {
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -535,3 +566,4 @@ document.getElementById('op-SeparacionCanales').addEventListener('click', opSepa
 document.getElementById('op-EnfriamientoColor').addEventListener('click', opEnfriamientoColor);
 document.getElementById('op-calentamientoColor').addEventListener('click', opCalentamientoColor);
 document.getElementById('op-NegativoRadial').addEventListener('click', opNegativoRadial);
+document.getElementById('op-FloresConPetalos').addEventListener('click', FloresConPetalos);

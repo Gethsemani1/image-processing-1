@@ -1422,43 +1422,6 @@ public static desenfoqueLente(arrImage: number[][][]): number[][][] {
 }
 
 
-public static SobreexposicionRadial(arrImage: number[][][]): number[][][] {
-  const width = arrImage[0][0].length;
-  const height = arrImage[0].length;
-  const sal = this.initArray(width, height);
-
-  // Centro de la imagen
-  const centerX = width / 2;
-  const centerY = height / 2;
-
-  // Radio máximo desde el centro
-  const maxRadius = Math.min(centerX, centerY);
-
-  for (let i = 0; i < height; i++) {
-      for (let j = 0; j < width; j++) {
-          // Calcula la distancia al centro
-          const distanceToCenter = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
-
-          // Normaliza la distancia al centro en un rango de 0 a 1
-          const normalizedDistance = distanceToCenter / maxRadius;
-
-          // Aplica sobreexposicion proporcional a la distancia al centro
-          const blurAmount = normalizedDistance * 150; // Ajusta el factor de sobreexposicion según sea necesario
-
-      
-          const blurredColorR = arrImage[0][i][j] + blurAmount;
-          const blurredColorG = arrImage[1][i][j] + blurAmount;
-          const blurredColorB = arrImage[2][i][j] + blurAmount;
-
-   
-          sal[0][i][j] = Math.min(255, blurredColorR);
-          sal[1][i][j] = Math.min(255, blurredColorG);
-          sal[2][i][j] = Math.min(255, blurredColorB);
-      }
-  }
-
-  return sal;
-}
 
 
 
@@ -1597,7 +1560,36 @@ public static NegativoRadial(arrImage: number[][][], radio: number): number[][][
 }
 
 
+public static SobreexposicionRadial(arrImage: number[][][], radio: number): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
 
+  // Calcula el punto central de la imagen
+  const centerX = Math.floor(width / 2);
+  const centerY = Math.floor(height / 2);
+
+  // Aplica el efecto de sobreexposición radial dentro del radio especificado
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          const distanciaAlCentro = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
+
+          if (distanciaAlCentro <= radio) {
+              // Aumenta la intensidad de los colores solo dentro del radio
+              sal[0][i][j] = Math.min(255, arrImage[0][i][j] * 1.5);
+              sal[1][i][j] = Math.min(255, arrImage[1][i][j] * 1.5);
+              sal[2][i][j] = Math.min(255, arrImage[2][i][j] * 1.5);
+          } else {
+              // Mantén los colores originales fuera del radio
+              sal[0][i][j] = arrImage[0][i][j];
+              sal[1][i][j] = arrImage[1][i][j];
+              sal[2][i][j] = arrImage[2][i][j];
+          }
+      }
+  }
+
+  return sal;
+}
 
 
 

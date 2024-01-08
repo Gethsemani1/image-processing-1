@@ -1312,33 +1312,6 @@ var MathImg = /** @class */ (function () {
         }
         return sal;
     };
-    MathImg.SobreexposicionRadial = function (arrImage) {
-        var width = arrImage[0][0].length;
-        var height = arrImage[0].length;
-        var sal = this.initArray(width, height);
-        // Centro de la imagen
-        var centerX = width / 2;
-        var centerY = height / 2;
-        // Radio máximo desde el centro
-        var maxRadius = Math.min(centerX, centerY);
-        for (var i = 0; i < height; i++) {
-            for (var j = 0; j < width; j++) {
-                // Calcula la distancia al centro
-                var distanceToCenter = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
-                // Normaliza la distancia al centro en un rango de 0 a 1
-                var normalizedDistance = distanceToCenter / maxRadius;
-                // Aplica sobreexposicion proporcional a la distancia al centro
-                var blurAmount = normalizedDistance * 150; // Ajusta el factor de sobreexposicion según sea necesario
-                var blurredColorR = arrImage[0][i][j] + blurAmount;
-                var blurredColorG = arrImage[1][i][j] + blurAmount;
-                var blurredColorB = arrImage[2][i][j] + blurAmount;
-                sal[0][i][j] = Math.min(255, blurredColorR);
-                sal[1][i][j] = Math.min(255, blurredColorG);
-                sal[2][i][j] = Math.min(255, blurredColorB);
-            }
-        }
-        return sal;
-    };
     MathImg.escalaGrisesDinamica = function (arrImage, intensidad) {
         var width = arrImage[0][0].length;
         var height = arrImage[0].length;
@@ -1433,6 +1406,33 @@ var MathImg = /** @class */ (function () {
                     sal[0][i][j] = 255 - arrImage[0][i][j];
                     sal[1][i][j] = 255 - arrImage[1][i][j];
                     sal[2][i][j] = 255 - arrImage[2][i][j];
+                }
+                else {
+                    // Mantén los colores originales fuera del radio
+                    sal[0][i][j] = arrImage[0][i][j];
+                    sal[1][i][j] = arrImage[1][i][j];
+                    sal[2][i][j] = arrImage[2][i][j];
+                }
+            }
+        }
+        return sal;
+    };
+    MathImg.SobreexposicionRadial = function (arrImage, radio) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Calcula el punto central de la imagen
+        var centerX = Math.floor(width / 2);
+        var centerY = Math.floor(height / 2);
+        // Aplica el efecto de sobreexposición radial dentro del radio especificado
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                var distanciaAlCentro = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
+                if (distanciaAlCentro <= radio) {
+                    // Aumenta la intensidad de los colores solo dentro del radio
+                    sal[0][i][j] = Math.min(255, arrImage[0][i][j] * 1.5);
+                    sal[1][i][j] = Math.min(255, arrImage[1][i][j] * 1.5);
+                    sal[2][i][j] = Math.min(255, arrImage[2][i][j] * 1.5);
                 }
                 else {
                     // Mantén los colores originales fuera del radio
