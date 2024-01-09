@@ -1,7 +1,7 @@
 import { ImageLocal } from "./ImageLocal.js";
 import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
-import { Particle, YellowFlowerWithPetals } from "./particle.js";
+import { Particle, YellowFlowerWithPetals, Leaf } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
@@ -214,6 +214,8 @@ var numberOfParticles = 1000;
 var particlesArray;
 particlesArray = new Array(0);
 var imagenSal;
+/////////////////
+var leafArray = [];
 function init() {
     //init
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -316,6 +318,29 @@ function animateYellowFlowersWithPetals() {
 function FloresConPetalos() {
     initYellowFlowersWithPetals();
     animateYellowFlowersWithPetals();
+}
+// LLUVIA CON HOJAS 
+function initLeafRain() {
+    for (var i = 0; i < 50; i++) {
+        var x = Math.random() * pantalla2.canvas.width;
+        var y = Math.random() * pantalla2.canvas.height / 2;
+        var width = Math.random() * 10 + 5;
+        var height = Math.random() * 15 + 10;
+        leafArray.push(new Leaf(x, y, width, height, ctx));
+    }
+}
+function animateLeafRain() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    for (var i = 0; i < leafArray.length; i++) {
+        leafArray[i].update();
+        leafArray[i].draw();
+    }
+    // Llama a la animación de forma recursiva
+    requestAnimationFrame(animateLeafRain);
+}
+function LluviaHoja() {
+    initLeafRain();
+    animateLeafRain();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -559,11 +584,12 @@ document.getElementById("op-shearingX").addEventListener('click', shearingX2, fa
 document.getElementById("op-shearingY").addEventListener('click', shearingY2, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //proyecto
-document.getElementById('op-desenfoque').addEventListener('click', opDesenfoqueLente);
-document.getElementById('op-SobreexposicionRadial').addEventListener('click', opSobreexposicionRadial);
-document.getElementById('op-EscalaGrisesDinamica').addEventListener('click', opEscalaGrisesDinamica);
-document.getElementById('op-SeparacionCanales').addEventListener('click', opSeparacionCanales);
-document.getElementById('op-EnfriamientoColor').addEventListener('click', opEnfriamientoColor);
-document.getElementById('op-calentamientoColor').addEventListener('click', opCalentamientoColor);
-document.getElementById('op-NegativoRadial').addEventListener('click', opNegativoRadial);
-document.getElementById('op-FloresConPetalos').addEventListener('click', FloresConPetalos);
+document.getElementById("op-desenfoque").addEventListener('click', opDesenfoqueLente);
+document.getElementById("op-SobreexposicionRadial").addEventListener('click', opSobreexposicionRadial);
+document.getElementById("op-EscalaGrisesDinamica").addEventListener('click', opEscalaGrisesDinamica);
+document.getElementById("op-SeparacionCanales").addEventListener('click', opSeparacionCanales);
+document.getElementById("op-EnfriamientoColor").addEventListener('click', opEnfriamientoColor);
+document.getElementById("op-calentamientoColor").addEventListener('click', opCalentamientoColor);
+document.getElementById("op-NegativoRadial").addEventListener('click', opNegativoRadial);
+document.getElementById("op-FloresConPetalos").addEventListener('click', FloresConPetalos);
+document.getElementById("op-LluviaHoja").addEventListener('click', LluviaHoja);

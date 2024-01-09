@@ -120,10 +120,11 @@ export class ParticleText {
 
 }
 
+
 export class YellowFlower {
   public x: number;
   public y: number;
-  protected size: number;
+  public size: number;
   protected ctx: CanvasRenderingContext2D;
 
   constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D) {
@@ -145,7 +146,7 @@ export class YellowFlower {
 export class Petal {
   public x: number;
   public y: number;
-  protected size: number;
+  public size: number;
   protected angle: number;
   protected ctx: CanvasRenderingContext2D;
 
@@ -167,7 +168,7 @@ export class Petal {
 }
 
 export class YellowFlowerWithPetals extends YellowFlower {
-  protected petals: Petal[];
+  public petals: Petal[];
 
   constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D) {
     super(x, y, size, ctx);
@@ -191,42 +192,47 @@ export class YellowFlowerWithPetals extends YellowFlower {
       this.petals[i].draw();
     }
   }
+
+  
   
 }
 
-export class RainOfFlowers {
-  protected flowers: YellowFlowerWithPetals[];
+export class Leaf {
+  protected x: number;
+  protected y: number;
+  protected width: number;
+  protected height: number;
   protected ctx: CanvasRenderingContext2D;
+  protected fallSpeed: number;
 
-  constructor(ctx: CanvasRenderingContext2D) {
-    this.flowers = [];
+  constructor(x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
     this.ctx = ctx;
-    this.generateFlowers();
-  }
-
-  protected generateFlowers() {
-    for (let i = 0; i < 100; i++) {
-      let x = Math.random() * this.ctx.canvas.width;
-      let y = Math.random() * this.ctx.canvas.height;
-      let size = Math.random() * 10 + 5;
-      this.flowers.push(new YellowFlowerWithPetals(x, y, size, this.ctx));
-    }
+    this.fallSpeed = Math.random() * 2 + 1; 
   }
 
   public update() {
-    for (let i = 0; i < this.flowers.length; i++) {
-      this.flowers[i].y += 2; // Ajusta la velocidad de caída según sea necesario
+    this.y += this.fallSpeed;
 
-      // Reinicia la posición si una flor llega al fondo del lienzo
-      if (this.flowers[i].y > this.ctx.canvas.height) {
-        this.flowers[i].y = 0;
-      }
+    if (this.y > this.ctx.canvas.height) {
+      this.y = 0;
+      this.x = Math.random() * this.ctx.canvas.width; 
     }
   }
 
   public draw() {
-    for (let i = 0; i < this.flowers.length; i++) {
-      this.flowers[i].draw();
-    }
+    // Dibuja una hoja
+    this.ctx.fillStyle = '#8B4513'; // Marrón para el tronco
+    this.ctx.fillRect(this.x + this.width / 3, this.y + this.height * 0.7, this.width / 3, this.height * 0.3);
+    this.ctx.fillStyle = '#228B22'; // Verde oscuro para la parte superior de la hoja
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.x, this.y + this.height / 2);
+    this.ctx.quadraticCurveTo(this.x + this.width / 2, this.y, this.x + this.width, this.y + this.height / 2);
+    this.ctx.quadraticCurveTo(this.x + this.width / 2, this.y + this.height, this.x, this.y + this.height / 2);
+    this.ctx.closePath();
+    this.ctx.fill();
   }
 }

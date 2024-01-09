@@ -162,34 +162,34 @@ var YellowFlowerWithPetals = /** @class */ (function (_super) {
     return YellowFlowerWithPetals;
 }(YellowFlower));
 export { YellowFlowerWithPetals };
-var RainOfFlowers = /** @class */ (function () {
-    function RainOfFlowers(ctx) {
-        this.flowers = [];
+var Leaf = /** @class */ (function () {
+    function Leaf(x, y, width, height, ctx) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
         this.ctx = ctx;
-        this.generateFlowers();
+        this.fallSpeed = Math.random() * 2 + 1;
     }
-    RainOfFlowers.prototype.generateFlowers = function () {
-        for (var i = 0; i < 100; i++) {
-            var x = Math.random() * this.ctx.canvas.width;
-            var y = Math.random() * this.ctx.canvas.height;
-            var size = Math.random() * 10 + 5;
-            this.flowers.push(new YellowFlowerWithPetals(x, y, size, this.ctx));
+    Leaf.prototype.update = function () {
+        this.y += this.fallSpeed;
+        if (this.y > this.ctx.canvas.height) {
+            this.y = 0;
+            this.x = Math.random() * this.ctx.canvas.width;
         }
     };
-    RainOfFlowers.prototype.update = function () {
-        for (var i = 0; i < this.flowers.length; i++) {
-            this.flowers[i].y += 2; // Ajusta la velocidad de caída según sea necesario
-            // Reinicia la posición si una flor llega al fondo del lienzo
-            if (this.flowers[i].y > this.ctx.canvas.height) {
-                this.flowers[i].y = 0;
-            }
-        }
+    Leaf.prototype.draw = function () {
+        // Dibuja una hoja
+        this.ctx.fillStyle = '#8B4513'; // Marrón para el tronco
+        this.ctx.fillRect(this.x + this.width / 3, this.y + this.height * 0.7, this.width / 3, this.height * 0.3);
+        this.ctx.fillStyle = '#228B22'; // Verde oscuro para la parte superior de la hoja
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y + this.height / 2);
+        this.ctx.quadraticCurveTo(this.x + this.width / 2, this.y, this.x + this.width, this.y + this.height / 2);
+        this.ctx.quadraticCurveTo(this.x + this.width / 2, this.y + this.height, this.x, this.y + this.height / 2);
+        this.ctx.closePath();
+        this.ctx.fill();
     };
-    RainOfFlowers.prototype.draw = function () {
-        for (var i = 0; i < this.flowers.length; i++) {
-            this.flowers[i].draw();
-        }
-    };
-    return RainOfFlowers;
+    return Leaf;
 }());
-export { RainOfFlowers };
+export { Leaf };
