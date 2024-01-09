@@ -236,3 +236,84 @@ export class Leaf {
     this.ctx.fill();
   }
 }
+
+export class Firefly {
+  protected x: number;
+  protected y: number;
+  protected size: number;
+  protected ctx: CanvasRenderingContext2D;
+  protected blinkInterval: number;
+  protected isBlinking: boolean;
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.ctx = ctx;
+    this.blinkInterval = Math.random() * 2000 + 500; // Intervalo de parpadeo aleatorio
+    this.isBlinking = false;
+
+    // Inicia el parpadeo después de un breve retraso aleatorio
+    setTimeout(() => {
+      this.startBlinking();
+    }, Math.random() * 2000);
+  }
+
+  private startBlinking() {
+    this.isBlinking = true;
+
+    // Detiene el parpadeo después de un tiempo aleatorio
+    setTimeout(() => {
+      this.stopBlinking();
+    }, Math.random() * 2000 + 500);
+  }
+
+  private stopBlinking() {
+    this.isBlinking = false;
+
+    // Inicia el próximo parpadeo después de un tiempo aleatorio
+    setTimeout(() => {
+      this.startBlinking();
+    }, Math.random() * 2000 + 500);
+  }
+
+  public update() {
+    // No es necesario actualizar la posición para luciérnagas estáticas
+  }
+
+  public draw() {
+    this.ctx.fillStyle = this.isBlinking ? 'rgba(255, 255, 0, 0.8)' : 'rgba(255, 255, 0, 0.2)';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+}
+
+export class MovingFirefly extends Firefly {
+  protected speedX: number;
+  protected speedY: number;
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D, speedX: number, speedY: number) {
+    super(x, y, size, ctx);
+    this.speedX = speedX;
+    this.speedY = speedY;
+  }
+
+  public update() {
+    // Actualiza la posición basada en la velocidad
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // Revierte la dirección si alcanza los bordes del lienzo
+    if (this.x + this.size > this.ctx.canvas.width || this.x - this.size < 0) {
+      this.speedX *= -1;
+    }
+
+    if (this.y + this.size > this.ctx.canvas.height || this.y - this.size < 0) {
+      this.speedY *= -1;
+    }
+
+    super.update(); // Llama al método update de la clase base
+  }
+}

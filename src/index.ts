@@ -2,7 +2,7 @@
 import { ImageLocal } from "./ImageLocal.js";
 import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
-import { Particle, YellowFlowerWithPetals, Leaf  } from "./particle.js";
+import { Particle, YellowFlowerWithPetals, Leaf, Firefly, MovingFirefly } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 
@@ -225,7 +225,11 @@ let particlesArray: Particle[];
 particlesArray = new Array(0);
 var imagenSal: ImageType;
 
-/////////////////
+//////////////////// Luciernagas
+let fireflyArray: Firefly[] = [];
+let movingFireflyArray: MovingFirefly[] = [];
+
+///////////////// Hojas
 
 let leafArray: Leaf[] = [];
 
@@ -373,7 +377,6 @@ function animateLeafRain() {
     leafArray[i].draw();
   }
 
-  // Llama a la animación de forma recursiva
   requestAnimationFrame(animateLeafRain);
 }
 
@@ -383,6 +386,73 @@ function LluviaHoja() {
   animateLeafRain();
 }
 
+////// LUCIERNAGAS
+
+function initFireflies() {
+  
+  for (let i = 0; i < 50; i++) {
+    let x = Math.random() * pantalla2.canvas.width;
+    let y = Math.random() * pantalla2.canvas.height;
+    let size = Math.random() * 3 + 1;
+    fireflyArray.push(new Firefly(x, y, size, ctx));
+  }
+}
+
+
+function animateFireflies() {
+  
+  ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+
+  // Dibuja y actualiza cada luciérnaga
+  for (let i = 0; i < fireflyArray.length; i++) {
+    fireflyArray[i].update();
+    fireflyArray[i].draw();
+  }
+
+
+  requestAnimationFrame(animateFireflies);
+}
+
+
+function Luciernagas() {
+  initFireflies();
+  animateFireflies();
+}
+
+//Animando las luciernagas
+// Función de inicialización para el efecto de luciérnagas en movimiento
+function initMovingFireflies() {
+  // Crea luciérnagas en posiciones aleatorias con velocidades aleatorias
+  for (let i = 0; i < 50; i++) {
+    let x = Math.random() * pantalla2.canvas.width;
+    let y = Math.random() * pantalla2.canvas.height;
+    let size = Math.random() * 3 + 1;
+    let speedX = (Math.random() - 0.5) * 2; // Velocidad horizontal aleatoria entre -1 y 1
+    let speedY = (Math.random() - 0.5) * 2; // Velocidad vertical aleatoria entre -1 y 1
+    movingFireflyArray.push(new MovingFirefly(x, y, size, ctx, speedX, speedY));
+  }
+}
+
+// Función de animación para el efecto de luciérnagas en movimiento
+function animateMovingFireflies() {
+  // Dibuja un fondo o la imagen original
+  ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+
+  // Dibuja y actualiza cada luciérnaga en movimiento
+  for (let i = 0; i < movingFireflyArray.length; i++) {
+    movingFireflyArray[i].update();
+    movingFireflyArray[i].draw();
+  }
+
+  // Llama a la animación de forma recursiva
+  requestAnimationFrame(animateMovingFireflies);
+}
+
+// Llamada a las funciones de inicialización y animación de luciérnagas en movimiento
+function LuciernagasEnMovimiento() {
+  initMovingFireflies();
+  animateMovingFireflies();
+}
 
 //seccion de histogramas  
 function histogramas(evt: any): void{
@@ -608,7 +678,8 @@ document.getElementById('files').addEventListener('change', imgLocal.handleFileS
 document.getElementById('files2').addEventListener('change', imgLocal4.handleFileSelect, false);
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('drop', imgLocal.handleFileSelect, false);
-//menu op basicas
+
+/*
 document.getElementById("op-gris").addEventListener('click', convertirAGris, false);
 document.getElementById("op-negativo").addEventListener('click', convertirANegativo, false);
 document.getElementById("op-neg-gris").addEventListener('click', convertirANegativoGrises, false);
@@ -680,6 +751,8 @@ document.getElementById("op-shearingX").addEventListener('click', shearingX2, fa
 document.getElementById("op-shearingY").addEventListener('click', shearingY2, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
 
+
+*/
 //proyecto
 
 document.getElementById("op-desenfoque").addEventListener('click', opDesenfoqueLente);
@@ -691,6 +764,8 @@ document.getElementById("op-calentamientoColor").addEventListener('click', opCal
 document.getElementById("op-NegativoRadial").addEventListener('click', opNegativoRadial);
 document.getElementById("op-FloresConPetalos").addEventListener('click', FloresConPetalos);
 document.getElementById("op-LluviaHoja").addEventListener('click', LluviaHoja);
+document.getElementById("op-Luciernagas").addEventListener('click', Luciernagas);
+document.getElementById("op-LuciernagasEnMovimiento").addEventListener('click', LuciernagasEnMovimiento);
 
 
 

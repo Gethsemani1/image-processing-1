@@ -193,3 +193,70 @@ var Leaf = /** @class */ (function () {
     return Leaf;
 }());
 export { Leaf };
+var Firefly = /** @class */ (function () {
+    function Firefly(x, y, size, ctx) {
+        var _this = this;
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.ctx = ctx;
+        this.blinkInterval = Math.random() * 2000 + 500; // Intervalo de parpadeo aleatorio
+        this.isBlinking = false;
+        // Inicia el parpadeo después de un breve retraso aleatorio
+        setTimeout(function () {
+            _this.startBlinking();
+        }, Math.random() * 2000);
+    }
+    Firefly.prototype.startBlinking = function () {
+        var _this = this;
+        this.isBlinking = true;
+        // Detiene el parpadeo después de un tiempo aleatorio
+        setTimeout(function () {
+            _this.stopBlinking();
+        }, Math.random() * 2000 + 500);
+    };
+    Firefly.prototype.stopBlinking = function () {
+        var _this = this;
+        this.isBlinking = false;
+        // Inicia el próximo parpadeo después de un tiempo aleatorio
+        setTimeout(function () {
+            _this.startBlinking();
+        }, Math.random() * 2000 + 500);
+    };
+    Firefly.prototype.update = function () {
+        // No es necesario actualizar la posición para luciérnagas estáticas
+    };
+    Firefly.prototype.draw = function () {
+        this.ctx.fillStyle = this.isBlinking ? 'rgba(255, 255, 0, 0.8)' : 'rgba(255, 255, 0, 0.2)';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+    };
+    return Firefly;
+}());
+export { Firefly };
+var MovingFirefly = /** @class */ (function (_super) {
+    __extends(MovingFirefly, _super);
+    function MovingFirefly(x, y, size, ctx, speedX, speedY) {
+        var _this = _super.call(this, x, y, size, ctx) || this;
+        _this.speedX = speedX;
+        _this.speedY = speedY;
+        return _this;
+    }
+    MovingFirefly.prototype.update = function () {
+        // Actualiza la posición basada en la velocidad
+        this.x += this.speedX;
+        this.y += this.speedY;
+        // Revierte la dirección si alcanza los bordes del lienzo
+        if (this.x + this.size > this.ctx.canvas.width || this.x - this.size < 0) {
+            this.speedX *= -1;
+        }
+        if (this.y + this.size > this.ctx.canvas.height || this.y - this.size < 0) {
+            this.speedY *= -1;
+        }
+        _super.prototype.update.call(this); // Llama al método update de la clase base
+    };
+    return MovingFirefly;
+}(Firefly));
+export { MovingFirefly };

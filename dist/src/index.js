@@ -1,7 +1,7 @@
 import { ImageLocal } from "./ImageLocal.js";
 import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
-import { Particle, YellowFlowerWithPetals, Leaf } from "./particle.js";
+import { Particle, YellowFlowerWithPetals, Leaf, Firefly, MovingFirefly } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
@@ -214,7 +214,10 @@ var numberOfParticles = 1000;
 var particlesArray;
 particlesArray = new Array(0);
 var imagenSal;
-/////////////////
+//////////////////// Luciernagas
+var fireflyArray = [];
+var movingFireflyArray = [];
+///////////////// Hojas
 var leafArray = [];
 function init() {
     //init
@@ -335,12 +338,63 @@ function animateLeafRain() {
         leafArray[i].update();
         leafArray[i].draw();
     }
-    // Llama a la animación de forma recursiva
     requestAnimationFrame(animateLeafRain);
 }
 function LluviaHoja() {
     initLeafRain();
     animateLeafRain();
+}
+////// LUCIERNAGAS
+function initFireflies() {
+    for (var i = 0; i < 50; i++) {
+        var x = Math.random() * pantalla2.canvas.width;
+        var y = Math.random() * pantalla2.canvas.height;
+        var size = Math.random() * 3 + 1;
+        fireflyArray.push(new Firefly(x, y, size, ctx));
+    }
+}
+function animateFireflies() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    // Dibuja y actualiza cada luciérnaga
+    for (var i = 0; i < fireflyArray.length; i++) {
+        fireflyArray[i].update();
+        fireflyArray[i].draw();
+    }
+    requestAnimationFrame(animateFireflies);
+}
+function Luciernagas() {
+    initFireflies();
+    animateFireflies();
+}
+//Animando las luciernagas
+// Función de inicialización para el efecto de luciérnagas en movimiento
+function initMovingFireflies() {
+    // Crea luciérnagas en posiciones aleatorias con velocidades aleatorias
+    for (var i = 0; i < 50; i++) {
+        var x = Math.random() * pantalla2.canvas.width;
+        var y = Math.random() * pantalla2.canvas.height;
+        var size = Math.random() * 3 + 1;
+        var speedX = (Math.random() - 0.5) * 2; // Velocidad horizontal aleatoria entre -1 y 1
+        var speedY = (Math.random() - 0.5) * 2; // Velocidad vertical aleatoria entre -1 y 1
+        movingFireflyArray.push(new MovingFirefly(x, y, size, ctx, speedX, speedY));
+    }
+}
+// Función de animación para el efecto de luciérnagas en movimiento
+function animateMovingFireflies() {
+    // Dibuja un fondo o la imagen original
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    // Dibuja y actualiza cada luciérnaga en movimiento
+    for (var i = 0; i < movingFireflyArray.length; i++) {
+        movingFireflyArray[i].update();
+        movingFireflyArray[i].draw();
+    }
+    // Llama a la animación de forma recursiva
+    requestAnimationFrame(animateMovingFireflies);
+}
+// Llamada a las funciones de inicialización y animación de luciérnagas en movimiento
+function LuciernagasEnMovimiento() {
+    initMovingFireflies();
+    animateMovingFireflies();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -522,7 +576,7 @@ document.getElementById('files').addEventListener('change', imgLocal.handleFileS
 document.getElementById('files2').addEventListener('change', imgLocal4.handleFileSelect, false);
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('drop', imgLocal.handleFileSelect, false);
-//menu op basicas
+/*
 document.getElementById("op-gris").addEventListener('click', convertirAGris, false);
 document.getElementById("op-negativo").addEventListener('click', convertirANegativo, false);
 document.getElementById("op-neg-gris").addEventListener('click', convertirANegativoGrises, false);
@@ -545,6 +599,7 @@ document.getElementById("op-gradienteX").addEventListener('click', colorGradient
 document.getElementById("op-gradienteY").addEventListener('click', colorGradienteY, false);
 document.getElementById("op-contraste").addEventListener('click', opchangeContraste, false);
 document.getElementById("op-falsocolor").addEventListener('click', opchangeFalsoColor, false);
+
 //op matematicas
 document.getElementById("op-pow").addEventListener('click', opgetPow, false);
 document.getElementById("op-sqrt").addEventListener('click', sqrt, false);
@@ -555,34 +610,46 @@ document.getElementById("op-add").addEventListener('click', add, false);
 document.getElementById("op-subtract").addEventListener('click', subtract, false);
 document.getElementById("op-multiplicacion").addEventListener('click', multiplicacion, false);
 document.getElementById("op-div").addEventListener('click', div, false);
+
+
 //op con imagenes compuestas
 document.getElementById("op-addimg").addEventListener('click', sumaImg, false);
 document.getElementById("op-marca-agua-centro").addEventListener('click', marcaAguaCentro, false);
 document.getElementById("op-marca-agua-array").addEventListener('click', marcaAguaArray, false);
+
 //op con efectos
 document.getElementById("op-rain").addEventListener('click', rain, false);
 document.getElementById("op-rain2").addEventListener('click', rain2, false);
+
 //op con texto.
 document.getElementById("op-text").addEventListener('click', textEfects, false);
+
 //histogramas
 document.getElementById("op-hist").addEventListener('click', histogramas, false);
 document.getElementById("op-ecualizar").addEventListener('click', ecualizado, false);
+
+
 //mortfologia
 document.getElementById("op-eros").addEventListener('click', erosionarImg, false);
 document.getElementById("op-dila").addEventListener('click', dilatarImg, false);
 document.getElementById("op-aper").addEventListener('click', aperturaImg, false);
 document.getElementById("op-cier").addEventListener('click', cierreImg, false);
+
 //operacion con imagenes siteticas
 document.getElementById("op-pulso").addEventListener('click', generarPulso, false);
 document.getElementById("op-ruido").addEventListener('click', generarRuido, false);
 document.getElementById("op-rampax").addEventListener('click', generarRampaX, false);
 document.getElementById("op-rampay").addEventListener('click', generarRampaY, false);
+
 //operaciones geometricas
 document.getElementById("op-escalamiento").addEventListener('click', escalarImagen2, false);
 document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, false);
 document.getElementById("op-shearingX").addEventListener('click', shearingX2, false);
 document.getElementById("op-shearingY").addEventListener('click', shearingY2, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
+
+
+*/
 //proyecto
 document.getElementById("op-desenfoque").addEventListener('click', opDesenfoqueLente);
 document.getElementById("op-SobreexposicionRadial").addEventListener('click', opSobreexposicionRadial);
@@ -593,3 +660,5 @@ document.getElementById("op-calentamientoColor").addEventListener('click', opCal
 document.getElementById("op-NegativoRadial").addEventListener('click', opNegativoRadial);
 document.getElementById("op-FloresConPetalos").addEventListener('click', FloresConPetalos);
 document.getElementById("op-LluviaHoja").addEventListener('click', LluviaHoja);
+document.getElementById("op-Luciernagas").addEventListener('click', Luciernagas);
+document.getElementById("op-LuciernagasEnMovimiento").addEventListener('click', LuciernagasEnMovimiento);
